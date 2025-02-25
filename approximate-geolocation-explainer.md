@@ -58,7 +58,7 @@ A site is allowed to access geolocation if it has either the approximate or the
 precise permission.
 A site that does not have the precise location permission must not receive
 precise location data.
-A corresponding policy-control feature is not introduced.
+A corresponding policy-control feature is introduced.
 
 **Generate approximate location data.**
 To generate an approximate position estimate the browser should prefer to use
@@ -165,12 +165,35 @@ generate an approximate position estimate then `getCurrentPosition` and
 `watchPosition` must return `POSITION_UNAVAILABLE` when the `PositionOptions`
 parameter requires approximate location.
 
+## Permissions
+
+Section 3.1 defines a powerful feature `"geolocation"`. The specification will
+be updated to define an additional powerful feature `"geolocation-approximate"`
+to control access to approximate location. The algorithms to interface with the
+`"geolocation-approximate"` powerful feature will be overridden to take into
+account the fact that `"geolocation"` is "stronger" than
+`"geolocation-approximate"` (for example, a site will be allowed to access
+approximate location data if it has either the `"geolocation-approximate"` or
+the `"geolocation"` permission).
+
+## Permissions policy
+
+Section 11. defines a [policy-controlled
+feature](https://www.w3.org/TR/permissions-policy/#policy-controlled-feature)
+`"geolocation"`. It will be updated to define an additional policy-controlled
+feature `"geolocation-approximate"`, also with a default value of `"self"`,
+corresponding to the `"geolocation-approximate"` powerful feature. The
+`"geolocation"` feature will imply the `"geolocation-approximate"` feature.
+
 ## Request a position
 
-In Section 6.5, the [request a position](https://www.w3.org/TR/geolocation/#dfn-request-a-position)
-algorithm requests permission to use `"geolocation"`. It will be updated to
-request `"geolocation-approximate"` as a fallback when the `PositionOptions`
-parameter enables approximate location mode.
+In Section 6.5, the [request a
+position](https://www.w3.org/TR/geolocation/#dfn-request-a-position) algorithm
+requests permission to use `"geolocation"`. It will be updated to request
+`"geolocation-approximate"` as a fallback (so that the user can grant only
+approximate geolocation even if the website requests access precise location
+data). Moreover, if the `PositionOptions` parameter specifies approximate
+location mode, it will only prompt for `"geolocation-approximate"`.
 
 ## Acquire a position
 
